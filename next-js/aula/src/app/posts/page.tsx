@@ -15,13 +15,46 @@ export default async function Posts() {
     const response = await fetch("https://dummyjson.com/posts");
     const data: ResponseProps = await response.json();
 
-    console.log(data);
+    async function handleFetchPosts() {
+        "use server";
+        const response = await fetch("https://dummyjson.com/posts");
+        const data: ResponseProps = await response.json();
+        console.log(data.posts);
+    }
+
+    async function handleSearchUsers(formData: FormData) {
+        "use server";
+
+        const userId = formData.get("userId");
+
+        const response = await fetch(
+            `https://dummyjson.com/posts/user/${userId}`,
+        );
+        const data: ResponseProps = await response.json();
+
+        console.log(data);
+    }
 
     return (
         <div>
             <h1 className="text-center mt-5 mb-2 font-bold text-3xl">
                 Todos os posts
             </h1>
+
+            <button onClick={handleFetchPosts}>Buscar posts</button>
+
+            <form className="flex gap-2 my-4" action={handleSearchUsers}>
+                <input
+                    type="text"
+                    placeholder="ID do usuário"
+                    className="border border-gray-200 p-2"
+                    name="userId"
+                />
+
+                <button className="bg-blue text-white p-2" type="submit">
+                    Buscar usuario
+                </button>
+            </form>
 
             <Button />
 
