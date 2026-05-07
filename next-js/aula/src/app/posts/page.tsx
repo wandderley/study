@@ -12,8 +12,15 @@ interface ResponseProps {
     posts: PostProps[];
 }
 
+export const revalidate = 60;
+
 export default async function Posts() {
-    const response = await fetch("https://dummyjson.com/posts");
+    const response = await fetch("https://dummyjson.com/posts", {
+        cache: "force-cache",
+        next: {
+            revalidate: 60,
+        },
+    });
     const data: ResponseProps = await response.json();
 
     async function handleFetchPosts() {
@@ -64,7 +71,12 @@ export default async function Posts() {
                     <div key={post.id} className="bg-gray-200 p-4 rrounded-md">
                         <h2 className="font-bold">{post.title}</h2>
                         <p>{post.body}</p>
-                        <Link className="text-blue-500" href={`/posts/${post.id}`}>Acessar detalhes</Link>
+                        <Link
+                            className="text-blue-500"
+                            href={`/posts/${post.id}`}
+                        >
+                            Acessar detalhes
+                        </Link>
                     </div>
                 ))}
             </div>
